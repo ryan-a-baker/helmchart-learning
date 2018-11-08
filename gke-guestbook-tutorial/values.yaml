@@ -45,6 +45,19 @@ service:
     role: master
     tier: backend
 
+redisSlaveService:
+  name: redis-slave
+  type: ClusterIP
+  port: 6379
+  labels:
+    app: redis
+    role: slave
+    tier: backend
+  selector:
+    app: redis
+    role: slave
+    tier: backend
+
 ingress:
   enabled: false
   annotations: {}
