@@ -9,6 +9,12 @@ image:
   tag: e2e
   pullPolicy: IfNotPresent
 
+redisMaster:
+  port: 6379
+  app: redis
+  role: master
+  tier: backend
+
 nameOverride: ""
 fullnameOverride: ""
 

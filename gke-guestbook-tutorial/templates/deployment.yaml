@@ -13,11 +13,17 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+      app: {{ .Values.redisMaster.app }}
+      role: {{ .Values.redisMaster.role }}
+      tier: {{ .Values.redisMaster.tier }}
   template:
     metadata:
       labels:
         app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app: {{ .Values.redisMaster.app }}
+        role: {{ .Values.redisMaster.role }}
+        tier: {{ .Values.redisMaster.tier }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
