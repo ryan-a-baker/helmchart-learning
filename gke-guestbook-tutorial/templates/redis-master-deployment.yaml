@@ -25,6 +25,7 @@ spec:
         role: {{ .Values.redisMaster.role }}
         tier: {{ .Values.redisMaster.tier }}
     spec:
+      name: master
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

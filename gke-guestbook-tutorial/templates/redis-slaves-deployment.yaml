@@ -1,0 +1,62 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: test2 ##{{ include "gke-guestbook-tutorial.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
+    helm.sh/chart: {{ include "gke-guestbook-tutorial.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.slaveReplicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app: {{ .Values.redisSlave.app }}
+      role: {{ .Values.redisSlave.role }}
+      tier: {{ .Values.redisSlave.tier }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app: {{ .Values.redisSlave.app }}
+        role: {{ .Values.redisSlave.role }}
+        tier: {{ .Values.redisSlave.tier }}
+    spec:
+      name: slaves
+      containers:
+        - name: test1 ##{{ .Values.redisSlaveImage.Name }}
+          image: "{{ .Values.redisSlaveImage.repository }}:{{ .Values.redisSlaveImage.tag }}"
+          imagePullPolicy: {{ .Values.redisSlaveImage.pullPolicy }}
+          env:
+            - name: GET_HOSTS_FROM
+              value: {{ .Values.redisSlave.discoveryMechanism }}
+          # If your clust
+          ports:
+            - name: redis
+              containerPort: 6379
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

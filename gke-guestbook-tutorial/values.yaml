@@ -3,10 +3,17 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+slaveReplicaCount: 2
 
 image:
   repository: k8s.gcr.io/redis
   tag: e2e
+  pullPolicy: IfNotPresent
+
+redisSlaveImage:
+  name: Slave
+  repository: gcr.io/google_samples/gb-redisslave
+  tag: v1
   pullPolicy: IfNotPresent
 
 redisMaster:
@@ -14,6 +21,13 @@ redisMaster:
   app: redis
   role: master
   tier: backend
+
+redisSlave:
+  port: 6379
+  app: redis
+  role: slave
+  tier: backend
+  discoveryMechanism: dns
 
 nameOverride: ""
 fullnameOverride: ""
