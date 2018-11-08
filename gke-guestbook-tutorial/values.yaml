@@ -15,6 +15,14 @@ fullnameOverride: ""
 service:
   type: ClusterIP
   port: 6379
+  labels:
+    app: redis
+    role: master
+    tier: backend
+  selector:
+    app: redis
+    role: master
+    tier: backend
 
 ingress:
   enabled: false

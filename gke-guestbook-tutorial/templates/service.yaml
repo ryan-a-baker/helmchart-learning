@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: {{ include "gke-guestbook-tutorial.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
-    helm.sh/chart: {{ include "gke-guestbook-tutorial.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app: {{ .Values.service.labels.app }}
+    role: {{ .Values.service.labels.role }}
+    tier: {{ .Values.service.labels.tier }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -15,5 +14,6 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    app: {{ .Values.service.selector.app }}
+    role: {{ .Values.service.selector.role }}
+    tier: {{ .Values.service.selector.tier }}
