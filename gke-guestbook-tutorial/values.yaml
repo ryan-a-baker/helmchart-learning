@@ -33,6 +33,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 service:
+  name: redis-master
   type: ClusterIP
   port: 6379
   labels:
