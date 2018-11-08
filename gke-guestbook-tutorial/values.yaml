@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  tag: stable
+  repository: k8s.gcr.io/redis
+  tag: e2e
   pullPolicy: IfNotPresent
 
 nameOverride: ""
