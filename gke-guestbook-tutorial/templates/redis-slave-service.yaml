@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.redisSlaveService.name }} ## redis-master ##{{ include "gke-guestbook-tutorial.fullname" . }}
+  name: {{ .Values.redisSlaveService.name }}
   labels:
     app: {{ .Values.redisSlaveService.labels.app }}
     role: {{ .Values.redisSlaveService.labels.role }}

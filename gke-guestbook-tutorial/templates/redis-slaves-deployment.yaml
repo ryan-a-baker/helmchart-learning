@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: redis-slave ##{{ include "gke-guestbook-tutorial.fullname" . }}
+  name: redis-slave
   labels:
     app: {{ .Values.redisSlave.app }}
     role: {{ .Values.redisSlave.role }}
@@ -26,25 +26,16 @@ spec:
     spec:
       name: slaves
       containers:
-        - name: test1 ##{{ .Values.redisSlaveImage.Name }}
+        - name: test1
           image: "{{ .Values.redisSlaveImage.repository }}:{{ .Values.redisSlaveImage.tag }}"
           imagePullPolicy: {{ .Values.redisSlaveImage.pullPolicy }}
           env:
             - name: GET_HOSTS_FROM
               value: {{ .Values.redisSlave.discoveryMechanism }}
-          # If your clust
           ports:
             - name: redis
               containerPort: 6379
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}

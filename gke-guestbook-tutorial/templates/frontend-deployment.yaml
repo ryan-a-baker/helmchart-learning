@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: frontend ##{{ include "gke-guestbook-tutorial.fullname" . }}
+  name: frontend
   labels:
     app: {{ .Values.frontend.labels.app }}
     tier: {{ .Values.frontend.labels.tier }}
@@ -25,19 +25,10 @@ spec:
           env:
             - name: GET_HOSTS_FROM
               value: {{ .Values.frontend.discoveryMechanism }}
-          # If your clust
           ports:
             - name: frontend
               containerPort: 80
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}

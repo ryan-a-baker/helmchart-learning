@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: redis-master ##{{ include "gke-guestbook-tutorial.fullname" . }}
+  name: redis-master
   labels:
     app: {{ .Values.redisMaster.app }}
     role: {{ .Values.redisMaster.role }}
@@ -33,14 +33,6 @@ spec:
             - name: redis
               containerPort: 6379
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
