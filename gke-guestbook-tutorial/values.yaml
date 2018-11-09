@@ -58,6 +58,20 @@ redisSlaveService:
     role: slave
     tier: backend
 
+frontend:
+  name: frontend
+  replicas: 1
+  labels:
+    app: guestbook
+    tier: frontend
+  image:
+    repository: gcr.io/google-samples/gb-frontend
+    tag: v4
+    pullPolicy: IfNotPresent
+  discoveryMechanism: DNS
+  serviceType: LoadBalancer
+  port: 80
+
 ingress:
   enabled: false
   annotations: {}

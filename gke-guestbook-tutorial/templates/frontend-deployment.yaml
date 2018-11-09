@@ -1,0 +1,54 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: frontend ##{{ include "gke-guestbook-tutorial.fullname" . }}
+  labels:
+    app: {{ .Values.frontend.labels.app }}
+    tier: {{ .Values.frontend.labels.tier }}
+spec:
+  replicas: {{ .Values.frontend.replicas  }}
+  selector:
+    matchLabels:
+      app: {{ .Values.frontend.labels.app }}
+      tier: {{ .Values.frontend.labels.tier }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.frontend.labels.app }}
+        tier: {{ .Values.frontend.labels.tier }}
+    spec:
+      name: front-end-servers
+      containers:
+        - name: test3 ##{{ .Values.redisSlaveImage.Name }}
+          image: "{{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}"
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+          env:
+            - name: GET_HOSTS_FROM
+              value: {{ .Values.frontend.discoveryMechanism }}
+          # If your clust
+          ports:
+            - name: frontend
+              containerPort: 80
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

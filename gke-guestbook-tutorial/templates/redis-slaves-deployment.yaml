@@ -1,12 +1,11 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: test2 ##{{ include "gke-guestbook-tutorial.fullname" . }}
+  name: redis-slave ##{{ include "gke-guestbook-tutorial.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
-    helm.sh/chart: {{ include "gke-guestbook-tutorial.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app: {{ .Values.redisSlave.app }}
+    role: {{ .Values.redisSlave.role }}
+    tier: {{ .Values.redisSlave.tier }}
 spec:
   replicas: {{ .Values.slaveReplicaCount }}
   selector:
