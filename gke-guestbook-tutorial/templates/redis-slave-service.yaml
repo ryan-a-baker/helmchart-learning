@@ -10,9 +10,6 @@ spec:
   type: {{ .Values.redisSlaveService.type }}
   ports:
     - port: {{ .Values.redisSlaveService.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
   selector:
     app: {{ .Values.redisSlaveService.selector.app }}
     role: {{ .Values.redisSlaveService.selector.role }}
