@@ -2,37 +2,34 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-slaveReplicaCount: 2
-
-image:
-  repository: k8s.gcr.io/redis
-  tag: e2e
-  pullPolicy: IfNotPresent
-
-redisSlaveImage:
-  name: Slave
-  repository: gcr.io/google_samples/gb-redisslave
-  tag: v1
-  pullPolicy: IfNotPresent
-
 redisMaster:
+  name: redis-master
   port: 6379
   app: redis
   role: master
   tier: backend
+  replicaCount: 1
+  image:
+    name: master
+    repository: k8s.gcr.io/redis
+    tag: e2e
+    pullPolicy: IfNotPresent
 
 redisSlave:
+  name: redis-slave
   port: 6379
   app: redis
   role: slave
   tier: backend
+  replicaCount: 2
   discoveryMechanism: dns
+  image:
+    name: slave
+    repository: gcr.io/google_samples/gb-redisslave
+    tag: v1
+    pullPolicy: IfNotPresent
 
-nameOverride: ""
-fullnameOverride: ""
-
-service:
+redisMasterService:
   name: redis-master
   type: ClusterIP
   port: 6379
@@ -71,6 +68,9 @@ frontend:
   discoveryMechanism: DNS
   serviceType: LoadBalancer
   port: 80
+
+nameOverride: ""
+fullnameOverride: ""
 
 ingress:
   enabled: false

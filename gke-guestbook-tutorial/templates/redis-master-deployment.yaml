@@ -1,37 +1,33 @@
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: redis-master
+  name: {{ .Values.redisMaster.name }}
   labels:
     app: {{ .Values.redisMaster.app }}
     role: {{ .Values.redisMaster.role }}
     tier: {{ .Values.redisMaster.tier }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.redisMaster.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
       app: {{ .Values.redisMaster.app }}
       role: {{ .Values.redisMaster.role }}
       tier: {{ .Values.redisMaster.tier }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
         app: {{ .Values.redisMaster.app }}
         role: {{ .Values.redisMaster.role }}
         tier: {{ .Values.redisMaster.tier }}
     spec:
-      name: test ##{{ .Values.service.name }}
+      name: {{ .Values.redisMaster.name }}
       containers:
-        - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ .Values.redisMaster.image.name }}
+          image: "{{ .Values.redisMaster.image.repository }}:{{ .Values.redisMaster.image.tag }}"
+          imagePullPolicy: {{ .Values.redisMaster.image.pullPolicy }}
           ports:
             - name: redis
-              containerPort: 6379
+              containerPort: {{ .Values.redisMaster.port }}
               protocol: TCP
           resources:
 {{ toYaml .Values.resources | indent 12 }}

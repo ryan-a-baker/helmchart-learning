@@ -7,34 +7,30 @@ metadata:
     role: {{ .Values.redisSlave.role }}
     tier: {{ .Values.redisSlave.tier }}
 spec:
-  replicas: {{ .Values.slaveReplicaCount }}
+  replicas: {{ .Values.redisSlave.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
       app: {{ .Values.redisSlave.app }}
       role: {{ .Values.redisSlave.role }}
       tier: {{ .Values.redisSlave.tier }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "gke-guestbook-tutorial.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
         app: {{ .Values.redisSlave.app }}
         role: {{ .Values.redisSlave.role }}
         tier: {{ .Values.redisSlave.tier }}
     spec:
       name: slaves
       containers:
-        - name: test1
-          image: "{{ .Values.redisSlaveImage.repository }}:{{ .Values.redisSlaveImage.tag }}"
-          imagePullPolicy: {{ .Values.redisSlaveImage.pullPolicy }}
+        - name: {{ .Values.redisSlave.image.name }}
+          image: "{{ .Values.redisSlave.image.repository }}:{{ .Values.redisSlave.image.tag }}"
+          imagePullPolicy: {{ .Values.redisSlave.image.pullPolicy }}
           env:
             - name: GET_HOSTS_FROM
               value: {{ .Values.redisSlave.discoveryMechanism }}
           ports:
-            - name: redis
-              containerPort: 6379
+            - name: {{ .Values.redisSlave.name }}
+              containerPort: {{ .Values.redisSlave.port }}
               protocol: TCP
           resources:
 {{ toYaml .Values.resources | indent 12 }}
