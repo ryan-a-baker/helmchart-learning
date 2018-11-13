@@ -25,6 +25,10 @@ spec:
           env:
             - name: GET_HOSTS_FROM
               value: {{ .Values.frontend.discoveryMechanism }}
+            - name: REDIS_MASTER_SERVICE_HOST
+              value: 'gke-demo-1-redis-master'
+            - name: REDIS_SLAVE_SERVICE_HOST
+              value: 'gke-demo-1-redis-slave'
           ports:
             - name: frontend
               containerPort: 80
